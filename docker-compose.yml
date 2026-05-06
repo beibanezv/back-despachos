@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  mysql-despachos:
+    image: mysql:8.0
+    container_name: mysql-despachos
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      # Named volume: persiste datos aunque se reinicie el contenedor
+      - mysql_despachos_data:/var/lib/mysql
+    networks:
+      - despachos-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  back-despachos:
+    build: ./Springboot-API-REST-DESPACHO
+    container_name: back-despachos
+    ports:
+      - "8081:8081"
+    environment:
+      DB_ENDPOINT: mysql-despachos
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      mysql-despachos:
+        condition: service_healthy
+    networks:
+      - despachos-net
+
+volumes:
+  mysql_despachos_data:
+    # Named volume justificación: los datos de BD persisten
+    # independientemente del ciclo de vida del contenedor
+
+networks:
+  despachos-net:
+    driver: bridge
