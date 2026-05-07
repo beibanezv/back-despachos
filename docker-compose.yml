@@ -10,7 +10,6 @@ services:
     ports:
       - "3308:3306"
     volumes:
-      # Named volume: persiste datos aunque se reinicie el contenedor
       - mysql_despachos_data:/var/lib/mysql
     networks:
       - despachos-net
@@ -21,7 +20,7 @@ services:
       retries: 5
 
   back-despachos:
-    build: ./Springboot-API-REST-DESPACHO
+    image: ${DOCKERHUB_USERNAME}/back-despachos:latest
     container_name: back-despachos
     ports:
       - "8081:8081"
@@ -39,8 +38,6 @@ services:
 
 volumes:
   mysql_despachos_data:
-    # Named volume justificación: los datos de BD persisten
-    # independientemente del ciclo de vida del contenedor
 
 networks:
   despachos-net:
