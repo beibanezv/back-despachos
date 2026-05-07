@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mysql-despachos:
     image: mysql:8.0
@@ -10,7 +8,7 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3308:3306"
     volumes:
       # Named volume: persiste datos aunque se reinicie el contenedor
       - mysql_despachos_data:/var/lib/mysql
