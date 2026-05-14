@@ -15,9 +15,10 @@ services:
       - despachos-net
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
 
   back-despachos:
     image: ${DOCKERHUB_USERNAME}/back-despachos:latest
